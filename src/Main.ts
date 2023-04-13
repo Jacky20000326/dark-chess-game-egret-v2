@@ -399,7 +399,6 @@ let concreteGameStore = new GameStore()
 let concreteChoseSameCampChess = new ChoseSameCampChess()
 let ConcreteEatChess = new EatChess()
 let ConcreteHeadHandler = new HeadHandler()
-let ConcreteMoveChess = new MoveChess()
 // concrete 遊戲中的職責鏈
 
 // 玩家選陣營(camp)
