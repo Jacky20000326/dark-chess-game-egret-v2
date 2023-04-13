@@ -34,6 +34,7 @@ class Main extends eui.UILayer {
     CountRecordContainer: any
     constructor(){
         super()
+        
         this.allChess = null
         this.PlaygroundContainer = new egret.DisplayObjectContainer()
         this.PlayerScoreContainer = new egret.DisplayObjectContainer()
@@ -126,21 +127,20 @@ class Main extends eui.UILayer {
 
         this.createPlayground(this.PlaygroundContainer)
 
-        // add ChessBoard to Playground
+        // add ChessBoard to Playground Table
         this.PlaygroundContainer.addChild(this.CreateChessBoard(this.PlaygroundContainer.width, this.PlaygroundContainer.height))
 
         // Game title
         this.createGameTitle()
 
         // get initial chesses
-        let GetAllChess = this.InitalChess()  
-        this.SetInitChess(GetAllChess)
+        this.InitalChess()  
 
         // get chess position
         let GetPosition = this.ConcretePosition()
 
         // add chess to Playground
-        this.CreateChessImageAtPlayground(this.allChess,this.PlaygroundContainer,GetPosition)
+        this.CreateChessImageAtPlayground(GetPosition)
 
 
         // add playerState to Playground
@@ -188,7 +188,7 @@ class Main extends eui.UILayer {
         this.CreatePlayerState()
         this.CreateCountRecord()
         this.CheckChessState()
-        this.CreateChessImageAtPlayground(this.allChess,this.PlaygroundContainer,GetPosition)
+        this.CreateChessImageAtPlayground(GetPosition)
 
         
     }
@@ -233,19 +233,19 @@ class Main extends eui.UILayer {
 
 
     // 創建棋子圖片在playground
-    protected CreateChessImageAtPlayground(Allchess,PlaygroundContainer,GetPosition){
+    protected CreateChessImageAtPlayground(GetPosition){
 
-        Allchess.forEach((item,i)=>{            
+        this.allChess.forEach((item,i)=>{            
        
             if(item.state == 'close'){
-                PlaygroundContainer.addChild(this.CreateChess(`chessBack_png`,GetPosition[i].x,GetPosition[i].y,item))
+                this.PlaygroundContainer.addChild(this.CreateChess(`chessBack_png`,GetPosition[i].x,GetPosition[i].y,item))
             }else if(item.state == 'none'){
 
-                PlaygroundContainer.addChild(this.CreateChess(`NoneChess_png`,GetPosition[i].x,GetPosition[i].y,item))
+                this.PlaygroundContainer.addChild(this.CreateChess(`NoneChess_png`,GetPosition[i].x,GetPosition[i].y,item))
                 
             }else{
 
-                PlaygroundContainer.addChild(this.CreateChess(`chess${item.imageIndex}_png`,GetPosition[i].x,GetPosition[i].y,item))
+                this.PlaygroundContainer.addChild(this.CreateChess(`chess${item.imageIndex}_png`,GetPosition[i].x,GetPosition[i].y,item))
             }
         })
     }
@@ -255,7 +255,7 @@ class Main extends eui.UILayer {
     protected InitalChess(){
         let ConcreteChess =  new InitialChess()
         let getAllChess = ConcreteChess.initChessInfo()
-        return getAllChess
+        this.SetInitChess(getAllChess)
     }
 
 

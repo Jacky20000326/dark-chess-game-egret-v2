@@ -179,17 +179,16 @@ var Main = (function (_super) {
         this.createTableBg();
         // Playground DisplayObjectContainer
         this.createPlayground(this.PlaygroundContainer);
-        // add ChessBoard to Playground
+        // add ChessBoard to Playground Table
         this.PlaygroundContainer.addChild(this.CreateChessBoard(this.PlaygroundContainer.width, this.PlaygroundContainer.height));
         // Game title
         this.createGameTitle();
         // get initial chesses
-        var GetAllChess = this.InitalChess();
-        this.SetInitChess(GetAllChess);
+        this.InitalChess();
         // get chess position
         var GetPosition = this.ConcretePosition();
         // add chess to Playground
-        this.CreateChessImageAtPlayground(this.allChess, this.PlaygroundContainer, GetPosition);
+        this.CreateChessImageAtPlayground(GetPosition);
         // add playerState to Playground
         this.CreatePlayerState();
         // add Count to Playground
@@ -227,7 +226,7 @@ var Main = (function (_super) {
         this.CreatePlayerState();
         this.CreateCountRecord();
         this.CheckChessState();
-        this.CreateChessImageAtPlayground(this.allChess, this.PlaygroundContainer, GetPosition);
+        this.CreateChessImageAtPlayground(GetPosition);
     };
     Main.prototype.CheckChooseChess = function () {
     };
@@ -258,17 +257,17 @@ var Main = (function (_super) {
         return GetPosition;
     };
     // 創建棋子圖片在playground
-    Main.prototype.CreateChessImageAtPlayground = function (Allchess, PlaygroundContainer, GetPosition) {
+    Main.prototype.CreateChessImageAtPlayground = function (GetPosition) {
         var _this = this;
-        Allchess.forEach(function (item, i) {
+        this.allChess.forEach(function (item, i) {
             if (item.state == 'close') {
-                PlaygroundContainer.addChild(_this.CreateChess("chessBack_png", GetPosition[i].x, GetPosition[i].y, item));
+                _this.PlaygroundContainer.addChild(_this.CreateChess("chessBack_png", GetPosition[i].x, GetPosition[i].y, item));
             }
             else if (item.state == 'none') {
-                PlaygroundContainer.addChild(_this.CreateChess("NoneChess_png", GetPosition[i].x, GetPosition[i].y, item));
+                _this.PlaygroundContainer.addChild(_this.CreateChess("NoneChess_png", GetPosition[i].x, GetPosition[i].y, item));
             }
             else {
-                PlaygroundContainer.addChild(_this.CreateChess("chess" + item.imageIndex + "_png", GetPosition[i].x, GetPosition[i].y, item));
+                _this.PlaygroundContainer.addChild(_this.CreateChess("chess" + item.imageIndex + "_png", GetPosition[i].x, GetPosition[i].y, item));
             }
         });
     };
@@ -276,7 +275,7 @@ var Main = (function (_super) {
     Main.prototype.InitalChess = function () {
         var ConcreteChess = new InitialChess();
         var getAllChess = ConcreteChess.initChessInfo();
-        return getAllChess;
+        this.SetInitChess(getAllChess);
     };
     // 創建淺色棋盤圖
     Main.prototype.CreateChessBoard = function (PlaygroundContainerWidth, PlaygroundContainerHeight) {
