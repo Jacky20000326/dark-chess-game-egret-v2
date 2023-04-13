@@ -29,13 +29,21 @@
 
 class Main extends eui.UILayer {
     allChess:[] | null
+    PlaygroundContainer: any
+    PlayerScoreContainer: any
+    CountRecordContainer: any
     constructor(){
         super()
         this.allChess = null
+        this.PlaygroundContainer = new egret.DisplayObjectContainer()
+        this.PlayerScoreContainer = new egret.DisplayObjectContainer()
+        this.CountRecordContainer = new egret.DisplayObjectContainer()
+
     }
 
     protected SetInitChess(chessData){
         this.allChess = chessData
+
     }
 
 
@@ -61,8 +69,6 @@ class Main extends eui.UILayer {
         let assetAdapter = new AssetAdapter();
         egret.registerImplementation("eui.IAssetAdapter", assetAdapter);
         egret.registerImplementation("eui.IThemeAdapter", new ThemeAdapter());
-
-
         this.runGame()
     }
 
@@ -111,63 +117,146 @@ class Main extends eui.UILayer {
      */
     protected createGameScene(): void {
 
-        // table image
+        
 
+        // table image
+        this.createTableBg()
+
+        // Playground DisplayObjectContainer
+
+        this.createPlayground(this.PlaygroundContainer)
+
+        // add ChessBoard to Playground
+        this.PlaygroundContainer.addChild(this.CreateChessBoard(this.PlaygroundContainer.width, this.PlaygroundContainer.height))
+
+        // Game title
+        this.createGameTitle()
+
+        // get initial chesses
+        let GetAllChess = this.InitalChess()  
+        this.SetInitChess(GetAllChess)
+
+        // get chess position
+        let GetPosition = this.ConcretePosition()
+
+        // add chess to Playground
+        this.CreateChessImageAtPlayground(this.allChess,this.PlaygroundContainer,GetPosition)
+
+
+        // add playerState to Playground
+        this.CreatePlayerState()
+
+         // add Count to Playground
+        this.CreateCountRecord()
+
+
+    }
+
+    // 創建紀錄連續次數
+    protected CreateCountRecord(){
+        this.addChild(this.CountRecordContainer)
+        const CountLabel: egret.TextField = new egret.TextField();
+        CountLabel.text = `${concreteGameStore.count}`;
+        CountLabel.bold = true;
+        CountLabel.y =50
+        CountLabel.size = 40
+        CountLabel.x = this.stage.stageWidth - 150
+        this.CountRecordContainer.addChild(CountLabel)
+    }
+
+    // 創建遊戲標頭
+    protected createGameTitle(){
+        const GameTitle: egret.TextField = new egret.TextField();
+        GameTitle.text = "Dark Chess Game";
+        GameTitle.textAlign = egret.HorizontalAlign.CENTER;
+        this.addChild(GameTitle);
+        GameTitle.width = this.stage.stageWidth;
+        GameTitle.y = 50
+        GameTitle.size = 60
+        GameTitle.bold = true;
+
+    }
+
+    // 棋子畫面更新
+    protected UpdateplaygroundState(){
+
+        let GetPosition = this.ConcretePosition()
+        this.PlaygroundContainer.$children = []
+        this.PlayerScoreContainer.$children = []
+        this.CountRecordContainer.$children = []
+        this.PlaygroundContainer.addChild(this.CreateChessBoard(this.PlaygroundContainer.width, this.PlaygroundContainer.height))
+        this.CreatePlayerState()
+        this.CreateCountRecord()
+        this.CheckChessState()
+        this.CreateChessImageAtPlayground(this.allChess,this.PlaygroundContainer,GetPosition)
+
+        
+    }
+
+    protected CheckChooseChess(){
+
+    }
+
+    // 創建底圖
+    protected createTableBg(){
         let table = this.createBitmapByName("table_jpeg");
-       
         let stageW = this.stage.stageWidth;
         let stageH = this.stage.stageHeight;
         table.width = stageW;
         table.height = stageH;
         this.addChild(table);
+    }
 
-
-        // Playground DisplayObjectContainer
-        const PlaygroundContainer: egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
-
-        //Playground size 
+    // 創建playground
+    protected createPlayground(PlaygroundContainer){
         let Playgroundwidth = 1004
         let PlaygroundHeight = 504
         PlaygroundContainer.width = Playgroundwidth
         PlaygroundContainer.height = PlaygroundHeight
 
-        // Playground position
-        PlaygroundContainer.x= this.stage.stageWidth/2 - PlaygroundContainer.width/2
-        PlaygroundContainer.y = this.stage.stageHeight/2 - PlaygroundContainer.height/2
-        this.addChild(PlaygroundContainer)
 
-        // add ChessBoard to Playground
-        PlaygroundContainer.addChild(this.CreateChessBoard(PlaygroundContainer.width, PlaygroundContainer.height))
+    // Playground position
+    PlaygroundContainer.x= this.stage.stageWidth/2 - PlaygroundContainer.width/2
+    PlaygroundContainer.y = this.stage.stageHeight/2 - PlaygroundContainer.height/2
+    this.addChild(PlaygroundContainer)
 
-        // get initial chesses
-        let GetAllChess =  this.InitalChess()  
-        this.SetInitChess(GetAllChess)
+    }
 
-        // get chess position
+
+    // 取得棋子座標
+    protected ConcretePosition(){
         let ConcreteGetChessPosition = new GetChessPosition()
         let GetPosition = ConcreteGetChessPosition.positionArr
+        return GetPosition
+    }
 
 
-        // add chess to Playground
 
-        this.allChess.forEach((item,i)=>{            
+    // 創建棋子圖片在playground
+    protected CreateChessImageAtPlayground(Allchess,PlaygroundContainer,GetPosition){
+
+        Allchess.forEach((item,i)=>{            
+       
             if(item.state == 'close'){
                 PlaygroundContainer.addChild(this.CreateChess(`chessBack_png`,GetPosition[i].x,GetPosition[i].y,item))
+            }else if(item.state == 'none'){
+
+                PlaygroundContainer.addChild(this.CreateChess(`NoneChess_png`,GetPosition[i].x,GetPosition[i].y,item))
+                
             }else{
 
                 PlaygroundContainer.addChild(this.CreateChess(`chess${item.imageIndex}_png`,GetPosition[i].x,GetPosition[i].y,item))
             }
         })
-      
-
     }
+
+
     // 創建初始化棋子
     protected InitalChess(){
         let ConcreteChess =  new InitialChess()
         let getAllChess = ConcreteChess.initChessInfo()
         return getAllChess
     }
-
 
 
     // 創建淺色棋盤圖
@@ -178,12 +267,14 @@ class Main extends eui.UILayer {
         return boardImg
     }
 
+
     //創建棋子
     protected CreateChess(ImageId:string,positionX:number,positionY:number,chessData):egret.DisplayObjectContainer {
         const ChessContainer: egret.DisplayObjectContainer = new egret.DisplayObjectContainer();
         ChessContainer.width = 125
         ChessContainer.height = 125
         this.addChild(ChessContainer)
+        
         let ChessImage = this.createBitmapByName(ImageId)
         ChessImage.width = ChessContainer.width * 0.9
         ChessImage.height = ChessContainer.height * 0.9
@@ -192,12 +283,91 @@ class Main extends eui.UILayer {
         ChessContainer.addChild(ChessImage)
         ChessImage.touchEnabled = true; 
         ChessImage.addEventListener(egret.TouchEvent.TOUCH_TAP, ()=>{
-            chessData.state = 'open'
-            console.log(this.allChess)
-            console.log(chessData)
+            SetCamp(chessData.belong)
+            this.CompareCamp(chessData)
+            this.UpdateplaygroundState()
         }, 'this');
         
         return ChessContainer
+    }
+
+    //檢查棋子被選狀態
+    protected CheckChessState(){
+        const color: number = 0x33CCFF; /// 光晕的颜色，十六进制，不包含透明度
+        const alpha: number = 0.8; /// 光晕的颜色透明度，是对 color 参数的透明度设定。有效值为 0.0 到 1.0。例如，0.8 设置透明度值为 80%。
+        const blurX: number = 35; /// 水平模糊量。有效值为 0 到 255.0（浮点）
+        const blurY: number = 35; /// 垂直模糊量。有效值为 0 到 255.0（浮点）
+        const strength: number = 2; /// 压印的强度，值越大，压印的颜色越深，而且发光与背景之间的对比度也越强。有效值为 0 到 255。暂未实现
+        const quality: number = egret.BitmapFilterQuality.HIGH; /// 应用滤镜的次数，建议用 BitmapFilterQuality 类的常量来体现
+        const inner: boolean = false; /// 指定发光是否为内侧发光，暂未实现
+        const knockout: boolean = false; /// 指定对象是否具有挖空效果，暂未实现
+        const glowFilter: egret.GlowFilter = new egret.GlowFilter(color, alpha, blurX, blurY, strength, quality, inner, knockout);
+
+        // let chooseChess = this.allChess.filter(item => item.isChoose == true)
+
+
+        console.log(this.PlaygroundContainer.$children)
+    }
+
+
+    // 創建玩家文本
+    protected CreatePlayerState(){
+        this.addChild(this.PlayerScoreContainer)
+        const Player1Label: egret.TextField = new egret.TextField();
+        const Player2Label: egret.TextField = new egret.TextField();
+       
+
+        if(Play1State.state){
+            let flagImage = this.createBitmapByName("flag_png")
+            flagImage.width = 30
+            flagImage.height = 30
+            flagImage.y = this.stage.stageHeight /1.2
+            flagImage.x = 380
+            
+            this.PlayerScoreContainer.addChild(flagImage)
+        }else{
+            let flagImage = this.createBitmapByName("flag_png")
+            flagImage.width = 30
+            flagImage.height = 30
+            flagImage.y = this.stage.stageHeight /1.2
+            flagImage.x = this.stage.stageWidth - 430
+            this.PlayerScoreContainer.addChild(flagImage)
+        }
+
+        Player1Label.text = `player1 score : ${Play1State.score}`;
+        Player1Label.bold = true;
+        Player1Label.y = this.stage.stageHeight /1.2
+        Player1Label.x = 100
+        
+      
+        Player2Label.text = `player2 score : ${Play2State.score}`;
+        Player2Label.bold = true;
+        Player2Label.y = this.stage.stageHeight /1.2
+        Player2Label.x = this.stage.stageWidth - 350
+        // Player2Label.textColor =Play2State.camp;
+
+        console.log(Play1State)
+       
+        if(Play1State.camp == 'red'){
+            Player1Label.textColor =  0xff0000
+            Player2Label.textColor = 0x0000ff
+            Player1Label.strokeColor = egret.TextField.default_textColor;
+            Player2Label.strokeColor = egret.TextField.default_textColor;
+            Player1Label.stroke = 2;
+            Player2Label.stroke = 2;
+        }else if(Play1State.camp == null){
+            Player1Label.textColor =  egret.TextField.default_textColor
+            Player2Label.textColor = egret.TextField.default_textColor
+        }else{
+            Player1Label.textColor =  0x0000ff
+            Player1Label.strokeColor = egret.TextField.default_textColor
+            Player2Label.strokeColor = egret.TextField.default_textColor
+            Player2Label.textColor = 0xff0000
+            Player1Label.stroke = 2;
+            Player2Label.stroke = 2;
+        }
+        this.PlayerScoreContainer.addChild(Player1Label)
+        this.PlayerScoreContainer.addChild(Player2Label)
     }
 
 
@@ -212,31 +382,95 @@ class Main extends eui.UILayer {
         result.texture = texture;
         return result;
     }
+
+
+
+    // 判斷玩家的陣營與所選是否相同及判斷chess.state
+    CompareCamp(chess) {
+
+    // concrete 遊戲中的職責鏈
+    let GetRequest = new Request(currPlayer(),chess,concreteGameStore,this.allChess,switchPlayer)
+    console.log(GetRequest)
+    this.resetAllChessState()
+
+    if(chess.state == 'close'){
+        chess.ConcreteOpen();
+        switchPlayer();
+        concreteGameStore.ResetpreChooseChess()
+        concreteGameStore.MoveCount("ReSetCount");
+        return
+    } 
     
-    /**
-     * 点击按钮
-     * Click the button
-     */
-    private callChess(e: egret.TouchEvent) {
-        let panel = new eui.Panel();
-        panel.title = "Title";
-        panel.horizontalCenter = 0;
-        panel.verticalCenter = 0;
-        this.addChild(panel);
+    
+    ConcreteHeadHandler.SetCondition(concreteChoseSameCampChess)
+    concreteChoseSameCampChess.SetCondition(ConcreteEatChess)
+    ConcreteEatChess.SetCondition(ConcreteMoveChess)
+    ConcreteHeadHandler.HandleRequest(GetRequest)
+
+    this.UpdateplaygroundState()
+};
+// 將所有棋子狀態改為close
+resetAllChessState(){
+    this.allChess.forEach(item => {
+        item.ConCreteResetChoose()
+        })
     }
-
-
-    
 }
 
-const clickHandler = (data)=>{
-    console.log(data)
+
+// 資料管理
+let Play1State = new Player1()
+let Play2State = new Player2()
+
+// 取得遊戲狀態
+let concreteGameStore = new GameStore()
+// 規則(職責鏈)實體化
+let concreteChoseSameCampChess = new ChoseSameCampChess()
+let ConcreteEatChess = new EatChess()
+let ConcreteHeadHandler = new HeadHandler()
+let ConcreteMoveChess = new MoveChess()
+// concrete 遊戲中的職責鏈
+
+// 玩家選陣營(camp)
+const SetCamp = (chess) => {
+    if (chess.belong == "red") {
+        Play1State.SetCamp("red");
+        Play2State.SetCamp("blue");
+    } else {
+        Play1State.SetCamp("blue");
+        Play2State.SetCamp("red");
+    }
+};
+
+// 取得當前玩家
+let currPlayer = ()=>{
+    return Play1State.state == true ? Play1State : Play2State
 }
 
-// const getChessUrl = (index, isOpenState) => {
-//     if (isOpenState == "close") {
-//         return BackImageChess.operation();
-//     } else {
-//         return FrontImageChess.operation(index);
-//     }
-// };
+
+// 判斷玩家的陣營與所選是否相同及判斷chess.state
+const CompareCamp = (chess) => {
+    // concrete 遊戲中的職責鏈
+    let GetRequest = new Request(currPlayer,chess,concreteGameStore,AllChess,switchPlayer)
+    resetAllChessState()
+
+    if(chess.state == 'close'){
+        chess.ConcreteOpen();
+        switchPlayer();
+        concreteGameStore.ResetpreChooseChess()
+        concreteGameStore.MoveCount("ReSetCount");
+        return
+    } 
+    ConcreteHeadHandler.SetCondition(concreteChoseSameCampChess)
+    concreteChoseSameCampChess.SetCondition(ConcreteEatChess)
+    ConcreteEatChess.SetCondition(ConcreteMoveChess)
+
+    ConcreteHeadHandler.HandleRequest(GetRequest)
+};
+
+// 玩家交換
+const switchPlayer = () => {
+    Play1State.SwitchPlayer();
+    Play2State.SwitchPlayer();
+};
+

@@ -76,6 +76,9 @@ var Main = (function (_super) {
     function Main() {
         var _this = _super.call(this) || this;
         _this.allChess = null;
+        _this.PlaygroundContainer = new egret.DisplayObjectContainer();
+        _this.PlayerScoreContainer = new egret.DisplayObjectContainer();
+        _this.CountRecordContainer = new egret.DisplayObjectContainer();
         return _this;
     }
     Main.prototype.SetInitChess = function (chessData) {
@@ -173,16 +176,72 @@ var Main = (function (_super) {
      */
     Main.prototype.createGameScene = function () {
         // table image
-        var _this = this;
+        this.createTableBg();
+        // Playground DisplayObjectContainer
+        this.createPlayground(this.PlaygroundContainer);
+        // add ChessBoard to Playground
+        this.PlaygroundContainer.addChild(this.CreateChessBoard(this.PlaygroundContainer.width, this.PlaygroundContainer.height));
+        // Game title
+        this.createGameTitle();
+        // get initial chesses
+        var GetAllChess = this.InitalChess();
+        this.SetInitChess(GetAllChess);
+        // get chess position
+        var GetPosition = this.ConcretePosition();
+        // add chess to Playground
+        this.CreateChessImageAtPlayground(this.allChess, this.PlaygroundContainer, GetPosition);
+        // add playerState to Playground
+        this.CreatePlayerState();
+        // add Count to Playground
+        this.CreateCountRecord();
+    };
+    // 創建紀錄連續次數
+    Main.prototype.CreateCountRecord = function () {
+        this.addChild(this.CountRecordContainer);
+        var CountLabel = new egret.TextField();
+        CountLabel.text = "" + concreteGameStore.count;
+        CountLabel.bold = true;
+        CountLabel.y = 50;
+        CountLabel.size = 40;
+        CountLabel.x = this.stage.stageWidth - 150;
+        this.CountRecordContainer.addChild(CountLabel);
+    };
+    // 創建遊戲標頭
+    Main.prototype.createGameTitle = function () {
+        var GameTitle = new egret.TextField();
+        GameTitle.text = "Dark Chess Game";
+        GameTitle.textAlign = egret.HorizontalAlign.CENTER;
+        this.addChild(GameTitle);
+        GameTitle.width = this.stage.stageWidth;
+        GameTitle.y = 50;
+        GameTitle.size = 60;
+        GameTitle.bold = true;
+    };
+    // 棋子畫面更新
+    Main.prototype.UpdateplaygroundState = function () {
+        var GetPosition = this.ConcretePosition();
+        this.PlaygroundContainer.$children = [];
+        this.PlayerScoreContainer.$children = [];
+        this.CountRecordContainer.$children = [];
+        this.PlaygroundContainer.addChild(this.CreateChessBoard(this.PlaygroundContainer.width, this.PlaygroundContainer.height));
+        this.CreatePlayerState();
+        this.CreateCountRecord();
+        this.CheckChessState();
+        this.CreateChessImageAtPlayground(this.allChess, this.PlaygroundContainer, GetPosition);
+    };
+    Main.prototype.CheckChooseChess = function () {
+    };
+    // 創建底圖
+    Main.prototype.createTableBg = function () {
         var table = this.createBitmapByName("table_jpeg");
         var stageW = this.stage.stageWidth;
         var stageH = this.stage.stageHeight;
         table.width = stageW;
         table.height = stageH;
         this.addChild(table);
-        // Playground DisplayObjectContainer
-        var PlaygroundContainer = new egret.DisplayObjectContainer();
-        //Playground size 
+    };
+    // 創建playground
+    Main.prototype.createPlayground = function (PlaygroundContainer) {
         var Playgroundwidth = 1004;
         var PlaygroundHeight = 504;
         PlaygroundContainer.width = Playgroundwidth;
@@ -191,18 +250,22 @@ var Main = (function (_super) {
         PlaygroundContainer.x = this.stage.stageWidth / 2 - PlaygroundContainer.width / 2;
         PlaygroundContainer.y = this.stage.stageHeight / 2 - PlaygroundContainer.height / 2;
         this.addChild(PlaygroundContainer);
-        // add ChessBoard to Playground
-        PlaygroundContainer.addChild(this.CreateChessBoard(PlaygroundContainer.width, PlaygroundContainer.height));
-        // get initial chesses
-        var GetAllChess = this.InitalChess();
-        this.SetInitChess(GetAllChess);
-        // get chess position
+    };
+    // 取得棋子座標
+    Main.prototype.ConcretePosition = function () {
         var ConcreteGetChessPosition = new GetChessPosition();
         var GetPosition = ConcreteGetChessPosition.positionArr;
-        // add chess to Playground
-        this.allChess.forEach(function (item, i) {
+        return GetPosition;
+    };
+    // 創建棋子圖片在playground
+    Main.prototype.CreateChessImageAtPlayground = function (Allchess, PlaygroundContainer, GetPosition) {
+        var _this = this;
+        Allchess.forEach(function (item, i) {
             if (item.state == 'close') {
                 PlaygroundContainer.addChild(_this.CreateChess("chessBack_png", GetPosition[i].x, GetPosition[i].y, item));
+            }
+            else if (item.state == 'none') {
+                PlaygroundContainer.addChild(_this.CreateChess("NoneChess_png", GetPosition[i].x, GetPosition[i].y, item));
             }
             else {
                 PlaygroundContainer.addChild(_this.CreateChess("chess" + item.imageIndex + "_png", GetPosition[i].x, GetPosition[i].y, item));
@@ -237,11 +300,79 @@ var Main = (function (_super) {
         ChessContainer.addChild(ChessImage);
         ChessImage.touchEnabled = true;
         ChessImage.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            chessData.state = 'open';
-            console.log(_this.allChess);
-            console.log(chessData);
+            SetCamp(chessData.belong);
+            _this.CompareCamp(chessData);
+            _this.UpdateplaygroundState();
         }, 'this');
         return ChessContainer;
+    };
+    //檢查棋子被選狀態
+    Main.prototype.CheckChessState = function () {
+        var color = 0x33CCFF; /// 光晕的颜色，十六进制，不包含透明度
+        var alpha = 0.8; /// 光晕的颜色透明度，是对 color 参数的透明度设定。有效值为 0.0 到 1.0。例如，0.8 设置透明度值为 80%。
+        var blurX = 35; /// 水平模糊量。有效值为 0 到 255.0（浮点）
+        var blurY = 35; /// 垂直模糊量。有效值为 0 到 255.0（浮点）
+        var strength = 2; /// 压印的强度，值越大，压印的颜色越深，而且发光与背景之间的对比度也越强。有效值为 0 到 255。暂未实现
+        var quality = 3 /* HIGH */; /// 应用滤镜的次数，建议用 BitmapFilterQuality 类的常量来体现
+        var inner = false; /// 指定发光是否为内侧发光，暂未实现
+        var knockout = false; /// 指定对象是否具有挖空效果，暂未实现
+        var glowFilter = new egret.GlowFilter(color, alpha, blurX, blurY, strength, quality, inner, knockout);
+        // let chooseChess = this.allChess.filter(item => item.isChoose == true)
+        console.log(this.PlaygroundContainer.$children);
+    };
+    // 創建玩家文本
+    Main.prototype.CreatePlayerState = function () {
+        this.addChild(this.PlayerScoreContainer);
+        var Player1Label = new egret.TextField();
+        var Player2Label = new egret.TextField();
+        if (Play1State.state) {
+            var flagImage = this.createBitmapByName("flag_png");
+            flagImage.width = 30;
+            flagImage.height = 30;
+            flagImage.y = this.stage.stageHeight / 1.2;
+            flagImage.x = 380;
+            this.PlayerScoreContainer.addChild(flagImage);
+        }
+        else {
+            var flagImage = this.createBitmapByName("flag_png");
+            flagImage.width = 30;
+            flagImage.height = 30;
+            flagImage.y = this.stage.stageHeight / 1.2;
+            flagImage.x = this.stage.stageWidth - 430;
+            this.PlayerScoreContainer.addChild(flagImage);
+        }
+        Player1Label.text = "player1 score : " + Play1State.score;
+        Player1Label.bold = true;
+        Player1Label.y = this.stage.stageHeight / 1.2;
+        Player1Label.x = 100;
+        Player2Label.text = "player2 score : " + Play2State.score;
+        Player2Label.bold = true;
+        Player2Label.y = this.stage.stageHeight / 1.2;
+        Player2Label.x = this.stage.stageWidth - 350;
+        // Player2Label.textColor =Play2State.camp;
+        console.log(Play1State);
+        if (Play1State.camp == 'red') {
+            Player1Label.textColor = 0xff0000;
+            Player2Label.textColor = 0x0000ff;
+            Player1Label.strokeColor = egret.TextField.default_textColor;
+            Player2Label.strokeColor = egret.TextField.default_textColor;
+            Player1Label.stroke = 2;
+            Player2Label.stroke = 2;
+        }
+        else if (Play1State.camp == null) {
+            Player1Label.textColor = egret.TextField.default_textColor;
+            Player2Label.textColor = egret.TextField.default_textColor;
+        }
+        else {
+            Player1Label.textColor = 0x0000ff;
+            Player1Label.strokeColor = egret.TextField.default_textColor;
+            Player2Label.strokeColor = egret.TextField.default_textColor;
+            Player2Label.textColor = 0xff0000;
+            Player1Label.stroke = 2;
+            Player2Label.stroke = 2;
+        }
+        this.PlayerScoreContainer.addChild(Player1Label);
+        this.PlayerScoreContainer.addChild(Player2Label);
     };
     /**
      * 根据name关键字创建一个Bitmap对象。name属性请参考resources/resource.json配置文件的内容。
@@ -253,27 +384,80 @@ var Main = (function (_super) {
         result.texture = texture;
         return result;
     };
-    /**
-     * 点击按钮
-     * Click the button
-     */
-    Main.prototype.callChess = function (e) {
-        var panel = new eui.Panel();
-        panel.title = "Title";
-        panel.horizontalCenter = 0;
-        panel.verticalCenter = 0;
-        this.addChild(panel);
+    // 判斷玩家的陣營與所選是否相同及判斷chess.state
+    Main.prototype.CompareCamp = function (chess) {
+        // concrete 遊戲中的職責鏈
+        var GetRequest = new Request(currPlayer(), chess, concreteGameStore, this.allChess, switchPlayer);
+        console.log(GetRequest);
+        this.resetAllChessState();
+        if (chess.state == 'close') {
+            chess.ConcreteOpen();
+            switchPlayer();
+            concreteGameStore.ResetpreChooseChess();
+            concreteGameStore.MoveCount("ReSetCount");
+            return;
+        }
+        ConcreteHeadHandler.SetCondition(concreteChoseSameCampChess);
+        concreteChoseSameCampChess.SetCondition(ConcreteEatChess);
+        ConcreteEatChess.SetCondition(ConcreteMoveChess);
+        ConcreteHeadHandler.HandleRequest(GetRequest);
+        this.UpdateplaygroundState();
+    };
+    ;
+    // 將所有棋子狀態改為close
+    Main.prototype.resetAllChessState = function () {
+        this.allChess.forEach(function (item) {
+            item.ConCreteResetChoose();
+        });
     };
     return Main;
 }(eui.UILayer));
 __reflect(Main.prototype, "Main");
-var clickHandler = function (data) {
-    console.log(data);
+// 資料管理
+var Play1State = new Player1();
+var Play2State = new Player2();
+// 取得遊戲狀態
+var concreteGameStore = new GameStore();
+// 規則(職責鏈)實體化
+var concreteChoseSameCampChess = new ChoseSameCampChess();
+var ConcreteEatChess = new EatChess();
+var ConcreteHeadHandler = new HeadHandler();
+var ConcreteMoveChess = new MoveChess();
+// concrete 遊戲中的職責鏈
+// 玩家選陣營(camp)
+var SetCamp = function (chess) {
+    if (chess.belong == "red") {
+        Play1State.SetCamp("red");
+        Play2State.SetCamp("blue");
+    }
+    else {
+        Play1State.SetCamp("blue");
+        Play2State.SetCamp("red");
+    }
 };
-// const getChessUrl = (index, isOpenState) => {
-//     if (isOpenState == "close") {
-//         return BackImageChess.operation();
-//     } else {
-//         return FrontImageChess.operation(index);
-//     }
-// }; 
+// 取得當前玩家
+var currPlayer = function () {
+    return Play1State.state == true ? Play1State : Play2State;
+};
+// 判斷玩家的陣營與所選是否相同及判斷chess.state
+var CompareCamp = function (chess) {
+    // concrete 遊戲中的職責鏈
+    var GetRequest = new Request(currPlayer, chess, concreteGameStore, AllChess, switchPlayer);
+    resetAllChessState();
+    if (chess.state == 'close') {
+        chess.ConcreteOpen();
+        switchPlayer();
+        concreteGameStore.ResetpreChooseChess();
+        concreteGameStore.MoveCount("ReSetCount");
+        return;
+    }
+    ConcreteHeadHandler.SetCondition(concreteChoseSameCampChess);
+    concreteChoseSameCampChess.SetCondition(ConcreteEatChess);
+    ConcreteEatChess.SetCondition(ConcreteMoveChess);
+    ConcreteHeadHandler.HandleRequest(GetRequest);
+};
+// 玩家交換
+var switchPlayer = function () {
+    Play1State.SwitchPlayer();
+    Play2State.SwitchPlayer();
+};

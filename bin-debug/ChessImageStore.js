@@ -1,4 +1,3 @@
-"use strict";
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
@@ -9,15 +8,13 @@ var __extends = this && this.__extends || function __extends(t, e) {
 for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
 r.prototype = e.prototype, t.prototype = new r();
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var ChessImageFlyweight = (function () {
     function ChessImageFlyweight() {
     }
     ChessImageFlyweight.prototype.operation = function () { };
     return ChessImageFlyweight;
 }());
-exports.ChessImageFlyweight = ChessImageFlyweight;
-__reflect(ChessImageFlyweight.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/ChessImageStore\".ChessImageFlyweight");
+__reflect(ChessImageFlyweight.prototype, "ChessImageFlyweight");
 var BackChessConcreteFlyweight = (function (_super) {
     __extends(BackChessConcreteFlyweight, _super);
     function BackChessConcreteFlyweight() {
@@ -28,8 +25,7 @@ var BackChessConcreteFlyweight = (function (_super) {
     };
     return BackChessConcreteFlyweight;
 }(ChessImageFlyweight));
-exports.BackChessConcreteFlyweight = BackChessConcreteFlyweight;
-__reflect(BackChessConcreteFlyweight.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/ChessImageStore\".BackChessConcreteFlyweight");
+__reflect(BackChessConcreteFlyweight.prototype, "BackChessConcreteFlyweight");
 var FrontChessConcreteFlyweight = (function (_super) {
     __extends(FrontChessConcreteFlyweight, _super);
     function FrontChessConcreteFlyweight() {
@@ -40,8 +36,7 @@ var FrontChessConcreteFlyweight = (function (_super) {
     };
     return FrontChessConcreteFlyweight;
 }(ChessImageFlyweight));
-exports.FrontChessConcreteFlyweight = FrontChessConcreteFlyweight;
-__reflect(FrontChessConcreteFlyweight.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/ChessImageStore\".FrontChessConcreteFlyweight");
+__reflect(FrontChessConcreteFlyweight.prototype, "FrontChessConcreteFlyweight");
 var ChessFlyweightFactory = (function () {
     function ChessFlyweightFactory() {
         this.flyweight = {};
@@ -53,5 +48,4 @@ var ChessFlyweightFactory = (function () {
     };
     return ChessFlyweightFactory;
 }());
-exports.ChessFlyweightFactory = ChessFlyweightFactory;
-__reflect(ChessFlyweightFactory.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/ChessImageStore\".ChessFlyweightFactory");
+__reflect(ChessFlyweightFactory.prototype, "ChessFlyweightFactory");

@@ -1,4 +1,3 @@
-"use strict";
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
@@ -9,7 +8,6 @@ var __extends = this && this.__extends || function __extends(t, e) {
 for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
 r.prototype = e.prototype, t.prototype = new r();
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var GameStore = (function () {
     function GameStore() {
         var _this = this;
@@ -31,7 +29,7 @@ var GameStore = (function () {
         this.preChooseChess = null;
     };
     GameStore.prototype.MoveCount = function (state) {
-        var DrawChess = 50;
+        var DrawChess = 2;
         if (state == "ReSetCount") {
             this.count = 0;
             return;
@@ -41,12 +39,13 @@ var GameStore = (function () {
         }
         if (this.count == DrawChess) {
             this.winner = "平局";
+            alert('平局遊戲結束');
+            location.reload();
         }
     };
     return GameStore;
 }());
-exports.GameStore = GameStore;
-__reflect(GameStore.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/GameStore\".GameStore");
+__reflect(GameStore.prototype, "GameStore");
 var Request = (function () {
     function Request(currPlayer, currChess, gameState, AllChessArr, switchPlayer) {
         this.currPlayer = currPlayer;
@@ -57,8 +56,7 @@ var Request = (function () {
     }
     return Request;
 }());
-exports.Request = Request;
-__reflect(Request.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/GameStore\".Request");
+__reflect(Request.prototype, "Request");
 var Handler = (function () {
     function Handler() {
     }
@@ -68,8 +66,7 @@ var Handler = (function () {
     Handler.prototype.HandleRequest = function () { };
     return Handler;
 }());
-exports.Handler = Handler;
-__reflect(Handler.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/GameStore\".Handler");
+__reflect(Handler.prototype, "Handler");
 var HeadHandler = (function (_super) {
     __extends(HeadHandler, _super);
     function HeadHandler() {
@@ -80,8 +77,7 @@ var HeadHandler = (function (_super) {
     };
     return HeadHandler;
 }(Handler));
-exports.HeadHandler = HeadHandler;
-__reflect(HeadHandler.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/GameStore\".HeadHandler");
+__reflect(HeadHandler.prototype, "HeadHandler");
 var ChoseSameCampChess = (function (_super) {
     __extends(ChoseSameCampChess, _super);
     function ChoseSameCampChess() {
@@ -92,11 +88,11 @@ var ChoseSameCampChess = (function (_super) {
             this.condition.HandleRequest(request);
             return;
         }
-        if (request.currPlayer.camp !== request.currChess.belong) {
-            alert("please pick " + request.currPlayer.camp + " color chess,thanks.");
-        }
-        else if (request.currChess.state == "none") {
+        if (request.currChess.state == "none") {
             alert("There is no chess.");
+        }
+        else if (request.currPlayer.camp !== request.currChess.belong) {
+            alert("please pick " + request.currPlayer.camp + " color chess,thanks.");
         }
         else {
             // 互叫選取狀態
@@ -107,8 +103,7 @@ var ChoseSameCampChess = (function (_super) {
     };
     return ChoseSameCampChess;
 }(Handler));
-exports.ChoseSameCampChess = ChoseSameCampChess;
-__reflect(ChoseSameCampChess.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/GameStore\".ChoseSameCampChess");
+__reflect(ChoseSameCampChess.prototype, "ChoseSameCampChess");
 var EatChess = (function (_super) {
     __extends(EatChess, _super);
     function EatChess() {
@@ -126,8 +121,7 @@ var EatChess = (function (_super) {
     };
     return EatChess;
 }(Handler));
-exports.EatChess = EatChess;
-__reflect(EatChess.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/GameStore\".EatChess");
+__reflect(EatChess.prototype, "EatChess");
 var MoveChess = (function (_super) {
     __extends(MoveChess, _super);
     function MoveChess() {
@@ -140,8 +134,7 @@ var MoveChess = (function (_super) {
     };
     return MoveChess;
 }(Handler));
-exports.MoveChess = MoveChess;
-__reflect(MoveChess.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/GameStore\".MoveChess");
+__reflect(MoveChess.prototype, "MoveChess");
 var isCannon = (function (_super) {
     __extends(isCannon, _super);
     function isCannon() {
@@ -155,5 +148,4 @@ var isCannon = (function (_super) {
     };
     return isCannon;
 }(Handler));
-exports.isCannon = isCannon;
-__reflect(isCannon.prototype, "\"/Users/user/Documents/Photons/Egret Project/Project 0411/src/GameStore\".isCannon");
+__reflect(isCannon.prototype, "isCannon");

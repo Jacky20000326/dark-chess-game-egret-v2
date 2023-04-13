@@ -1,4 +1,4 @@
-export class PlayerStore {
+class PlayerStore {
     constructor(camp = null) {
         this.camp = camp;
         this.score = 0;
@@ -9,8 +9,10 @@ export class PlayerStore {
     }
     SetScore(setWinner) {
         this.score += 1;
-        if (this.score == 1) {
+        if (this.score == 16) {
             setWinner(this.camp);
+            alert(`${this.camp} chess勝利，遊戲結束！！`)
+            location.reload()
             return;
         }
         console.log(`${this.camp}:${this.score}`);
@@ -24,14 +26,14 @@ export class PlayerStore {
     // }
 }
 
-export class Player1 extends PlayerStore {
+class Player1 extends PlayerStore {
     constructor() {
         super();
         this.state = true;
     }
 }
 
-export class Player2 extends PlayerStore {
+class Player2 extends PlayerStore {
     constructor() {
         super();
         this.state = false;
@@ -39,5 +41,5 @@ export class Player2 extends PlayerStore {
     // 切換玩家
 }
 
-export let player1 = new Player1();
-export let player2 = new Player2();
+let player1 = new Player1();
+let player2 = new Player2();

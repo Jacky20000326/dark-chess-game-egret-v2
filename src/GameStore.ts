@@ -1,4 +1,4 @@
-export class GameStore {
+class GameStore {
     constructor() {
         this.preChooseChess = null;
         this.occupiedState = null;
@@ -15,7 +15,7 @@ export class GameStore {
         this.preChooseChess = null;
     }
     MoveCount(state) {
-        let DrawChess = 50;
+        let DrawChess = 2;
         if (state == "ReSetCount") {
             this.count = 0;
             return;
@@ -25,6 +25,8 @@ export class GameStore {
         }
         if (this.count == DrawChess) {
             this.winner = "平局";
+            alert('平局遊戲結束')
+            location.reload()
         }
     }
     SetWinner = (winner) => {
@@ -32,7 +34,7 @@ export class GameStore {
     };
 }
 
-export class Request {
+class Request {
     constructor(currPlayer, currChess, gameState, AllChessArr, switchPlayer) {
         this.currPlayer = currPlayer;
         this.currChess = currChess;
@@ -42,29 +44,30 @@ export class Request {
     }
 }
 
-export class Handler {
+class Handler {
     SetCondition(condition) {
         this.condition = condition;
     }
     HandleRequest() {}
 }
 
-export class HeadHandler extends Handler {
+class HeadHandler extends Handler {
     HandleRequest(request) {
         this.condition.HandleRequest(request);
     }
 }
 
-export class ChoseSameCampChess extends Handler {
+class ChoseSameCampChess extends Handler {
     HandleRequest(request) {
         if (request.gameState.preChooseChess !== null) {
             this.condition.HandleRequest(request);
             return;
         }
-        if (request.currPlayer.camp !== request.currChess.belong) {
-            alert(`please pick ${request.currPlayer.camp} color chess,thanks.`);
-        } else if (request.currChess.state == "none") {
+        if (request.currChess.state == "none") {
             alert("There is no chess.");
+        
+        } else if (request.currPlayer.camp !== request.currChess.belong) {
+            alert(`please pick ${request.currPlayer.camp} color chess,thanks.`);
         } else {
             // 互叫選取狀態
             request.currChess.ConCreteSetChoose();
@@ -74,7 +77,7 @@ export class ChoseSameCampChess extends Handler {
     }
 }
 
-export class EatChess extends Handler {
+class EatChess extends Handler {
     HandleRequest(request) {
         if (request.currChess.state == "open") {
             request.gameState.preChooseChess.ConcreteAggressive(
@@ -92,7 +95,7 @@ export class EatChess extends Handler {
     }
 }
 
-export class MoveChess extends Handler {
+class MoveChess extends Handler {
     HandleRequest(request) {
         request.gameState.preChooseChess.ConcreteMove(request.currChess, request.AllChessArr, request.switchPlayer);
         request.gameState.ResetpreChooseChess();
@@ -100,7 +103,7 @@ export class MoveChess extends Handler {
     }
 }
 
-export class isCannon extends Handler {
+class isCannon extends Handler {
     HandleRequest() {
         if (this.preChooseChess.value == "砲" || this.preChooseChess.value == "炮") {
             // 執行砲的規則

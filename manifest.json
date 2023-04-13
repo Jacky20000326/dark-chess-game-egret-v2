@@ -8,16 +8,16 @@
 		"libs/modules/promise/promise.js"
 	],
 	"game": [
-		"bin-debug/LoadingUI.js",
-		"bin-debug/AssetAdapter.js",
-		"bin-debug/ChessPosition.js",
-		"bin-debug/ChessStore.js",
 		"bin-debug/GameStore.js",
+		"bin-debug/PlayerState.js",
+		"bin-debug/LoadingUI.js",
+		"bin-debug/ChessStore.js",
+		"bin-debug/AssetAdapter.js",
 		"bin-debug/initChess.js",
 		"bin-debug/ChessImageStore.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
-		"bin-debug/PlayerState.js",
+		"bin-debug/ChessPosition.js",
 		"bin-debug/Test.js",
 		"bin-debug/ThemeAdapter.js"
 	]
