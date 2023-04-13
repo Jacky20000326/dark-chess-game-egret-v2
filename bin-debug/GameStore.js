@@ -116,36 +116,9 @@ var EatChess = (function (_super) {
             request.gameState.MoveCount("ReSetCount");
         }
         else {
-            this.condition.HandleRequest(request);
+            console.log('error');
         }
     };
     return EatChess;
 }(Handler));
 __reflect(EatChess.prototype, "EatChess");
-var MoveChess = (function (_super) {
-    __extends(MoveChess, _super);
-    function MoveChess() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    MoveChess.prototype.HandleRequest = function (request) {
-        request.gameState.preChooseChess.ConcreteMove(request.currChess, request.AllChessArr, request.switchPlayer);
-        request.gameState.ResetpreChooseChess();
-        request.gameState.MoveCount("AddCount");
-    };
-    return MoveChess;
-}(Handler));
-__reflect(MoveChess.prototype, "MoveChess");
-var isCannon = (function (_super) {
-    __extends(isCannon, _super);
-    function isCannon() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    isCannon.prototype.HandleRequest = function () {
-        if (this.preChooseChess.value == "砲" || this.preChooseChess.value == "炮") {
-            // 執行砲的規則
-        }
-        this.condition.HandleRequest();
-    };
-    return isCannon;
-}(Handler));
-__reflect(isCannon.prototype, "isCannon");

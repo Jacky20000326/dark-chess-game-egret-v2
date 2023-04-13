@@ -1,4 +1,8 @@
 class GameStore {
+    winner: string
+    count: number
+    preChooseChess: any
+    occupiedState: any
     constructor() {
         this.preChooseChess = null;
         this.occupiedState = null;
@@ -90,24 +94,7 @@ class EatChess extends Handler {
             request.gameState.ResetpreChooseChess();
             request.gameState.MoveCount("ReSetCount");
         } else {
-            this.condition.HandleRequest(request);
+            console.log('error')
         }
-    }
-}
-
-class MoveChess extends Handler {
-    HandleRequest(request) {
-        request.gameState.preChooseChess.ConcreteMove(request.currChess, request.AllChessArr, request.switchPlayer);
-        request.gameState.ResetpreChooseChess();
-        request.gameState.MoveCount("AddCount");
-    }
-}
-
-class isCannon extends Handler {
-    HandleRequest() {
-        if (this.preChooseChess.value == "砲" || this.preChooseChess.value == "炮") {
-            // 執行砲的規則
-        }
-        this.condition.HandleRequest();
     }
 }

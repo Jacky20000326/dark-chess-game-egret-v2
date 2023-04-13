@@ -19,7 +19,6 @@ class Main extends eui.UILayer {
 
     protected SetInitChess(chessData){
         this.allChess = chessData
-
     }
 
     protected GetChessPosition(){
@@ -150,7 +149,6 @@ class Main extends eui.UILayer {
         GameTitle.y = 50
         GameTitle.size = 60
         GameTitle.bold = true;
-
     }
 
     // 棋子畫面更新
@@ -163,10 +161,9 @@ class Main extends eui.UILayer {
         this.PlaygroundContainer.addChild(this.CreateChessBoard(this.PlaygroundContainer.width, this.PlaygroundContainer.height))
         this.CreatePlayerState()
         this.CreateCountRecord()
-        this.CheckChessState()
+        // this.CheckChessState()
         this.CreateChessImageAtPlayground()
 
-        
     }
 
     protected CheckChooseChess(){
@@ -212,13 +209,17 @@ class Main extends eui.UILayer {
     protected CreateChessImageAtPlayground(){
         let GetPosition = this.GetChessPosition()
         this.allChess.forEach((item,i)=>{            
-       
             if(item.state == 'close'){
                 this.PlaygroundContainer.addChild(this.CreateChess(`chessBack_png`,GetPosition[i].x,GetPosition[i].y,item))
             }else if(item.state == 'none'){
                 this.PlaygroundContainer.addChild(this.CreateChess(`NoneChess_png`,GetPosition[i].x,GetPosition[i].y,item))
             }else{
-                this.PlaygroundContainer.addChild(this.CreateChess(`chess${item.imageIndex}_png`,GetPosition[i].x,GetPosition[i].y,item))
+                if(item.isChoose == true){
+                    this.PlaygroundContainer.addChild(this.CreateChess(`chesschecked${item.imageIndex}_png`,GetPosition[i].x,GetPosition[i].y,item))
+                }else{
+
+                    this.PlaygroundContainer.addChild(this.CreateChess(`chess${item.imageIndex}_png`,GetPosition[i].x,GetPosition[i].y,item))
+                }
             }
         })
     }
@@ -402,13 +403,13 @@ let ConcreteMoveChess = new MoveChess()
 // concrete 遊戲中的職責鏈
 
 // 玩家選陣營(camp)
-const SetCamp = (chess) => {
+let SetCamp = (chess) => {
     if (chess.belong == "red") {
-        Play1State.SetCamp("red");
-        Play2State.SetCamp("blue");
+        Play1State("red");
+        Play2State("blue");
     } else {
-        Play1State.SetCamp("blue");
-        Play2State.SetCamp("red");
+        Play1State("blue");
+        Play2State("red");
     }
 };
 
