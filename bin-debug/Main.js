@@ -1,31 +1,3 @@
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
@@ -79,10 +51,14 @@ var Main = (function (_super) {
         _this.PlaygroundContainer = new egret.DisplayObjectContainer();
         _this.PlayerScoreContainer = new egret.DisplayObjectContainer();
         _this.CountRecordContainer = new egret.DisplayObjectContainer();
+        _this.chessPosition = new GetChessPosition();
         return _this;
     }
     Main.prototype.SetInitChess = function (chessData) {
         this.allChess = chessData;
+    };
+    Main.prototype.GetChessPosition = function () {
+        return this.chessPosition.positionArr;
     };
     Main.prototype.createChildren = function () {
         _super.prototype.createChildren.call(this);
@@ -185,10 +161,8 @@ var Main = (function (_super) {
         this.createGameTitle();
         // get initial chesses
         this.InitalChess();
-        // get chess position
-        var GetPosition = this.ConcretePosition();
         // add chess to Playground
-        this.CreateChessImageAtPlayground(GetPosition);
+        this.CreateChessImageAtPlayground();
         // add playerState to Playground
         this.CreatePlayerState();
         // add Count to Playground
@@ -226,7 +200,7 @@ var Main = (function (_super) {
         this.CreatePlayerState();
         this.CreateCountRecord();
         this.CheckChessState();
-        this.CreateChessImageAtPlayground(GetPosition);
+        this.CreateChessImageAtPlayground();
     };
     Main.prototype.CheckChooseChess = function () {
     };
@@ -257,8 +231,9 @@ var Main = (function (_super) {
         return GetPosition;
     };
     // 創建棋子圖片在playground
-    Main.prototype.CreateChessImageAtPlayground = function (GetPosition) {
+    Main.prototype.CreateChessImageAtPlayground = function () {
         var _this = this;
+        var GetPosition = this.GetChessPosition();
         this.allChess.forEach(function (item, i) {
             if (item.state == 'close') {
                 _this.PlaygroundContainer.addChild(_this.CreateChess("chessBack_png", GetPosition[i].x, GetPosition[i].y, item));
@@ -319,26 +294,27 @@ var Main = (function (_super) {
         // let chooseChess = this.allChess.filter(item => item.isChoose == true)
         console.log(this.PlaygroundContainer.$children);
     };
+    // 創建旗子樣式
+    Main.prototype.CreateFlagStyle = function () {
+        var flagImage = this.createBitmapByName("flag_png");
+        flagImage.width = 30;
+        flagImage.height = 30;
+        flagImage.y = this.stage.stageHeight / 1.2;
+        return flagImage;
+    };
     // 創建玩家文本
     Main.prototype.CreatePlayerState = function () {
         this.addChild(this.PlayerScoreContainer);
         var Player1Label = new egret.TextField();
         var Player2Label = new egret.TextField();
+        var Flag = this.CreateFlagStyle();
         if (Play1State.state) {
-            var flagImage = this.createBitmapByName("flag_png");
-            flagImage.width = 30;
-            flagImage.height = 30;
-            flagImage.y = this.stage.stageHeight / 1.2;
-            flagImage.x = 380;
-            this.PlayerScoreContainer.addChild(flagImage);
+            Flag.x = 380;
+            this.PlayerScoreContainer.addChild(Flag);
         }
         else {
-            var flagImage = this.createBitmapByName("flag_png");
-            flagImage.width = 30;
-            flagImage.height = 30;
-            flagImage.y = this.stage.stageHeight / 1.2;
-            flagImage.x = this.stage.stageWidth - 430;
-            this.PlayerScoreContainer.addChild(flagImage);
+            Flag.x = this.stage.stageWidth - 430;
+            this.PlayerScoreContainer.addChild(Flag);
         }
         Player1Label.text = "player1 score : " + Play1State.score;
         Player1Label.bold = true;
