@@ -20,7 +20,6 @@
         let temp = getAllChess[PreChessIndex];
         getAllChess[PreChessIndex] = getAllChess[CurrChessResultIndex];
         getAllChess[CurrChessResultIndex] = temp;
-        console.log("移動");
     }
     ConcreteSetStage(context) {
         this.stage.SetStage(context);

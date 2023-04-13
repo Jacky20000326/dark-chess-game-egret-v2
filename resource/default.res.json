@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,bg_jpg,egret_icon_png,description_json,table_jpeg,playground_jpeg,flag_png,chess6_png,chess13_png,chess5_png,chess12_png,chess4_png,chess11_png,chess3_png,chess10_png,chess2_png,chess9_png,chess1_png,chess8_png,chess14_png,chess7_png,chessBack_png,NoneChess_png",
+			"keys": "checkbox_select_disabled_png,checkbox_select_down_png,checkbox_select_up_png,checkbox_unselect_png,selected_png,border_png,header_png,radiobutton_select_disabled_png,radiobutton_select_down_png,radiobutton_select_up_png,radiobutton_unselect_png,roundthumb_png,thumb_png,track_png,tracklight_png,handle_png,off_png,on_png,button_down_png,button_up_png,thumb_pb_png,track_pb_png,track_sb_png,bg_jpg,egret_icon_png,description_json,table_jpeg,playground_jpeg,flag_png,chess6_png,chess13_png,chess5_png,chess12_png,chess4_png,chess11_png,chess3_png,chess10_png,chess2_png,chess9_png,chess1_png,chess8_png,chess14_png,chess7_png,chessBack_png,NoneChess_png,chesschecked6_png,chesschecked5_png,chesschecked11_png,chesschecked3_png,chesschecked7_png,chesschecked14_png,chesschecked10_png,chesschecked12_png,chesschecked9_png,chesschecked13_png,chesschecked8_png,chesschecked2_png,chesschecked1_png,chesschecked4_png",
 			"name": "preload"
 		}
 	],
@@ -230,6 +230,76 @@
 			"name": "NoneChess_png",
 			"type": "image",
 			"url": "assets/MyChessAssets/Chesses/NoneChess.png"
+		},
+		{
+			"name": "chesschecked6_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked6.png"
+		},
+		{
+			"name": "chesschecked5_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked5.png"
+		},
+		{
+			"name": "chesschecked11_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked11.png"
+		},
+		{
+			"name": "chesschecked3_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked3.png"
+		},
+		{
+			"name": "chesschecked7_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked7.png"
+		},
+		{
+			"name": "chesschecked14_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked14.png"
+		},
+		{
+			"name": "chesschecked10_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked10.png"
+		},
+		{
+			"name": "chesschecked12_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked12.png"
+		},
+		{
+			"name": "chesschecked9_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked9.png"
+		},
+		{
+			"name": "chesschecked13_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked13.png"
+		},
+		{
+			"name": "chesschecked8_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked8.png"
+		},
+		{
+			"name": "chesschecked2_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked2.png"
+		},
+		{
+			"name": "chesschecked1_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked1.png"
+		},
+		{
+			"name": "chesschecked4_png",
+			"type": "image",
+			"url": "assets/MyChessAssets/Chesses/chesschecked4.png"
 		}
 	]
 }

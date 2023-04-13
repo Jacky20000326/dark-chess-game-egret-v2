@@ -30,7 +30,6 @@ var ChessInfo = (function () {
         var temp = getAllChess[PreChessIndex];
         getAllChess[PreChessIndex] = getAllChess[CurrChessResultIndex];
         getAllChess[CurrChessResultIndex] = temp;
-        console.log("移動");
     };
     ChessInfo.prototype.ConcreteSetStage = function (context) {
         this.stage.SetStage(context);

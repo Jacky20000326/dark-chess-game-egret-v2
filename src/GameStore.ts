@@ -1,4 +1,8 @@
 class GameStore {
+    winner: string
+    count: number
+    preChooseChess: any
+    occupiedState: any
     constructor() {
         this.preChooseChess = null;
         this.occupiedState = null;
@@ -63,6 +67,7 @@ class ChoseSameCampChess extends Handler {
             this.condition.HandleRequest(request);
             return;
         }
+        
         if (request.currChess.state == "none") {
             alert("There is no chess.");
         

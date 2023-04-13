@@ -19,7 +19,6 @@ class Main extends eui.UILayer {
 
     protected SetInitChess(chessData){
         this.allChess = chessData
-
     }
 
     protected GetChessPosition(){
@@ -150,7 +149,6 @@ class Main extends eui.UILayer {
         GameTitle.y = 50
         GameTitle.size = 60
         GameTitle.bold = true;
-
     }
 
     // 棋子畫面更新
@@ -163,10 +161,9 @@ class Main extends eui.UILayer {
         this.PlaygroundContainer.addChild(this.CreateChessBoard(this.PlaygroundContainer.width, this.PlaygroundContainer.height))
         this.CreatePlayerState()
         this.CreateCountRecord()
-        this.CheckChessState()
+        // this.CheckChessState()
         this.CreateChessImageAtPlayground()
 
-        
     }
 
     protected CheckChooseChess(){
@@ -212,13 +209,17 @@ class Main extends eui.UILayer {
     protected CreateChessImageAtPlayground(){
         let GetPosition = this.GetChessPosition()
         this.allChess.forEach((item,i)=>{            
-       
             if(item.state == 'close'){
                 this.PlaygroundContainer.addChild(this.CreateChess(`chessBack_png`,GetPosition[i].x,GetPosition[i].y,item))
             }else if(item.state == 'none'){
                 this.PlaygroundContainer.addChild(this.CreateChess(`NoneChess_png`,GetPosition[i].x,GetPosition[i].y,item))
             }else{
-                this.PlaygroundContainer.addChild(this.CreateChess(`chess${item.imageIndex}_png`,GetPosition[i].x,GetPosition[i].y,item))
+                if(item.isChoose == true){
+                    this.PlaygroundContainer.addChild(this.CreateChess(`chesschecked${item.imageIndex}_png`,GetPosition[i].x,GetPosition[i].y,item))
+                }else{
+
+                    this.PlaygroundContainer.addChild(this.CreateChess(`chess${item.imageIndex}_png`,GetPosition[i].x,GetPosition[i].y,item))
+                }
             }
         })
     }

@@ -1,4 +1,6 @@
+
 class GetChessPosition{
+    positionArr: {}[]
     constructor(){
         this.positionArr = [
             {

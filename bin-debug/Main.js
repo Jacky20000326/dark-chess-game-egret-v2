@@ -194,7 +194,7 @@ var Main = (function (_super) {
         this.PlaygroundContainer.addChild(this.CreateChessBoard(this.PlaygroundContainer.width, this.PlaygroundContainer.height));
         this.CreatePlayerState();
         this.CreateCountRecord();
-        this.CheckChessState();
+        // this.CheckChessState()
         this.CreateChessImageAtPlayground();
     };
     Main.prototype.CheckChooseChess = function () {
@@ -237,7 +237,12 @@ var Main = (function (_super) {
                 _this.PlaygroundContainer.addChild(_this.CreateChess("NoneChess_png", GetPosition[i].x, GetPosition[i].y, item));
             }
             else {
-                _this.PlaygroundContainer.addChild(_this.CreateChess("chess" + item.imageIndex + "_png", GetPosition[i].x, GetPosition[i].y, item));
+                if (item.isChoose == true) {
+                    _this.PlaygroundContainer.addChild(_this.CreateChess("chesschecked" + item.imageIndex + "_png", GetPosition[i].x, GetPosition[i].y, item));
+                }
+                else {
+                    _this.PlaygroundContainer.addChild(_this.CreateChess("chess" + item.imageIndex + "_png", GetPosition[i].x, GetPosition[i].y, item));
+                }
             }
         });
     };
