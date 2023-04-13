@@ -394,7 +394,6 @@ var concreteGameStore = new GameStore();
 var concreteChoseSameCampChess = new ChoseSameCampChess();
 var ConcreteEatChess = new EatChess();
 var ConcreteHeadHandler = new HeadHandler();
-var ConcreteMoveChess = new MoveChess();
 // concrete 遊戲中的職責鏈
 // 玩家選陣營(camp)
 var SetCamp = function (chess) {

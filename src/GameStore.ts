@@ -67,7 +67,6 @@ class ChoseSameCampChess extends Handler {
             this.condition.HandleRequest(request);
             return;
         }
-        
         if (request.currChess.state == "none") {
             alert("There is no chess.");
         
@@ -95,24 +94,7 @@ class EatChess extends Handler {
             request.gameState.ResetpreChooseChess();
             request.gameState.MoveCount("ReSetCount");
         } else {
-            this.condition.HandleRequest(request);
+            console.log('error')
         }
-    }
-}
-
-class MoveChess extends Handler {
-    HandleRequest(request) {
-        request.gameState.preChooseChess.ConcreteMove(request.currChess, request.AllChessArr, request.switchPlayer);
-        request.gameState.ResetpreChooseChess();
-        request.gameState.MoveCount("AddCount");
-    }
-}
-
-class isCannon extends Handler {
-    HandleRequest() {
-        if (this.preChooseChess.value == "砲" || this.preChooseChess.value == "炮") {
-            // 執行砲的規則
-        }
-        this.condition.HandleRequest();
     }
 }

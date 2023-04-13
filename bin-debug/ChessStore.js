@@ -40,9 +40,6 @@ var ChessInfo = (function () {
     ChessInfo.prototype.ConcreteMove = function (currChess, getAllChess, switchPlayer) {
         this.stage.Move(currChess, getAllChess, switchPlayer);
     };
-    ChessInfo.prototype.ConcreteBeingInvaded = function () {
-        this.stage.BeingInvaded();
-    };
     ChessInfo.prototype.ConcreteAggressive = function (currChess, getAllChess, switchPlayer, currPlayer, gameState) {
         this.stage.Aggressive(currChess, getAllChess, switchPlayer, currPlayer, gameState);
     };
@@ -207,9 +204,6 @@ var ChessCloseStage = (function (_super) {
     ChessCloseStage.prototype.Move = function () {
         console.log("不能移動");
     };
-    ChessCloseStage.prototype.BeingInvaded = function () {
-        console.log("不會被佔領");
-    };
     ChessCloseStage.prototype.Aggressive = function () {
         console.log("不能佔領別人");
     };
@@ -252,9 +246,6 @@ var ChessOpenStage = (function (_super) {
             alert("Cannot move");
             return;
         }
-    };
-    ChessOpenStage.prototype.BeingInvaded = function () {
-        console.log("被佔領");
     };
     ChessOpenStage.prototype.Aggressive = function (currChess, getAllChess, switchPlayer, currPlayer, gameState) {
         // 將(帥)兵(卒)規則 // 若為六可以吃
@@ -327,9 +318,6 @@ var ChessCannonStage = (function (_super) {
             alert("Cannot move");
             return;
         }
-    };
-    ChessCannonStage.prototype.BeingInvaded = function () {
-        console.log("none");
     };
     ChessCannonStage.prototype.Aggressive = function (currChess, getAllChess, switchPlayer, currPlayer, gameState) {
         var _this = this;
@@ -415,9 +403,6 @@ var ChessNoneStage = (function (_super) {
         console.log("none");
     };
     ChessNoneStage.prototype.Move = function () {
-        console.log("none");
-    };
-    ChessNoneStage.prototype.BeingInvaded = function () {
         console.log("none");
     };
     ChessNoneStage.prototype.Aggressive = function () {

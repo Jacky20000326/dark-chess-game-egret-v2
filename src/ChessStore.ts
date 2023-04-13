@@ -30,9 +30,6 @@
     ConcreteMove(currChess, getAllChess, switchPlayer) {
         this.stage.Move(currChess, getAllChess, switchPlayer);
     }
-    ConcreteBeingInvaded() {
-        this.stage.BeingInvaded();
-    }
     ConcreteAggressive(currChess, getAllChess, switchPlayer, currPlayer, gameState) {
         this.stage.Aggressive(currChess, getAllChess, switchPlayer, currPlayer, gameState);
     }
@@ -143,7 +140,7 @@ class Stage {
 }
 
 // close
- class ChessCloseStage extends Stage {
+class ChessCloseStage extends Stage {
     constructor(chess) {
         super();
 
@@ -157,9 +154,7 @@ class Stage {
     Move() {
         console.log("不能移動");
     }
-    BeingInvaded() {
-        console.log("不會被佔領");
-    }
+    
     Aggressive() {
         console.log("不能佔領別人");
     }
@@ -202,9 +197,7 @@ class Stage {
             return;
         }
     }
-    BeingInvaded() {
-        console.log("被佔領");
-    }
+  
     Aggressive(currChess, getAllChess, switchPlayer, currPlayer, gameState) {
         // 將(帥)兵(卒)規則 // 若為六可以吃
         let KingRull;
@@ -276,9 +269,7 @@ class Stage {
             return;
         }
     }
-    BeingInvaded() {
-        console.log("none");
-    }
+    
     Aggressive(currChess, getAllChess, switchPlayer, currPlayer, gameState) {
         let CurrChessResultIndex = getAllChess.findIndex((item) => item.id == currChess.id);
         let PreChessIndex = getAllChess.findIndex((item) => item.id == this.chess.id);
@@ -372,9 +363,8 @@ class Stage {
     Move() {
         console.log("none");
     }
-    BeingInvaded() {
-        console.log("none");
-    }
+
+    
     Aggressive() {
         console.log("none");
     }
