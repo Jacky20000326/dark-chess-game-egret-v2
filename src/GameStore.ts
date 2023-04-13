@@ -15,7 +15,7 @@ class GameStore {
         this.preChooseChess = null;
     }
     MoveCount(state) {
-        let DrawChess = 2;
+        let DrawChess = 40;
         if (state == "ReSetCount") {
             this.count = 0;
             return;

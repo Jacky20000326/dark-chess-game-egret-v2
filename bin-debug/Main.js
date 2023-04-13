@@ -81,7 +81,6 @@ var Main = (function (_super) {
     };
     Main.prototype.runGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var userInfo;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.loadResource()];
@@ -95,10 +94,6 @@ var Main = (function (_super) {
                         // const result = await RES.getResAsync("description_json")
                         // this.startAnimation(result);
                         _a.sent();
-                        return [4 /*yield*/, platform.getUserInfo()];
-                    case 3:
-                        userInfo = _a.sent();
-                        console.log(userInfo);
                         return [2 /*return*/];
                 }
             });
@@ -274,7 +269,7 @@ var Main = (function (_super) {
         ChessContainer.addChild(ChessImage);
         ChessImage.touchEnabled = true;
         ChessImage.addEventListener(egret.TouchEvent.TOUCH_TAP, function () {
-            SetCamp(chessData.belong);
+            SetCamp(chessData);
             _this.CompareCamp(chessData);
             _this.UpdateplaygroundState();
         }, 'this');
@@ -292,7 +287,6 @@ var Main = (function (_super) {
         var knockout = false; /// 指定对象是否具有挖空效果，暂未实现
         var glowFilter = new egret.GlowFilter(color, alpha, blurX, blurY, strength, quality, inner, knockout);
         // let chooseChess = this.allChess.filter(item => item.isChoose == true)
-        console.log(this.PlaygroundContainer.$children);
     };
     // 創建旗子樣式
     Main.prototype.CreateFlagStyle = function () {
@@ -325,7 +319,6 @@ var Main = (function (_super) {
         Player2Label.y = this.stage.stageHeight / 1.2;
         Player2Label.x = this.stage.stageWidth - 350;
         // Player2Label.textColor =Play2State.camp;
-        console.log(Play1State);
         if (Play1State.camp == 'red') {
             Player1Label.textColor = 0xff0000;
             Player2Label.textColor = 0x0000ff;
@@ -340,9 +333,9 @@ var Main = (function (_super) {
         }
         else {
             Player1Label.textColor = 0x0000ff;
+            Player2Label.textColor = 0xff0000;
             Player1Label.strokeColor = egret.TextField.default_textColor;
             Player2Label.strokeColor = egret.TextField.default_textColor;
-            Player2Label.textColor = 0xff0000;
             Player1Label.stroke = 2;
             Player2Label.stroke = 2;
         }
@@ -363,7 +356,6 @@ var Main = (function (_super) {
     Main.prototype.CompareCamp = function (chess) {
         // concrete 遊戲中的職責鏈
         var GetRequest = new Request(currPlayer(), chess, concreteGameStore, this.allChess, switchPlayer);
-        console.log(GetRequest);
         this.resetAllChessState();
         if (chess.state == 'close') {
             chess.ConcreteOpen();

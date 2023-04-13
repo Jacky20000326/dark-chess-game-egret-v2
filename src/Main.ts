@@ -60,8 +60,7 @@ class Main extends eui.UILayer {
         // const result = await RES.getResAsync("description_json")
         // this.startAnimation(result);
         await platform.login();
-        const userInfo = await platform.getUserInfo();
-        console.log(userInfo);
+
 
     }
     // 加載畫面
@@ -217,9 +216,7 @@ class Main extends eui.UILayer {
             if(item.state == 'close'){
                 this.PlaygroundContainer.addChild(this.CreateChess(`chessBack_png`,GetPosition[i].x,GetPosition[i].y,item))
             }else if(item.state == 'none'){
-
                 this.PlaygroundContainer.addChild(this.CreateChess(`NoneChess_png`,GetPosition[i].x,GetPosition[i].y,item))
-                
             }else{
                 this.PlaygroundContainer.addChild(this.CreateChess(`chess${item.imageIndex}_png`,GetPosition[i].x,GetPosition[i].y,item))
             }
@@ -259,7 +256,7 @@ class Main extends eui.UILayer {
         ChessContainer.addChild(ChessImage)
         ChessImage.touchEnabled = true; 
         ChessImage.addEventListener(egret.TouchEvent.TOUCH_TAP, ()=>{
-            SetCamp(chessData.belong)
+            SetCamp(chessData)
             this.CompareCamp(chessData)
             this.UpdateplaygroundState()
         }, 'this');
@@ -280,9 +277,6 @@ class Main extends eui.UILayer {
         const glowFilter: egret.GlowFilter = new egret.GlowFilter(color, alpha, blurX, blurY, strength, quality, inner, knockout);
 
         // let chooseChess = this.allChess.filter(item => item.isChoose == true)
-
-
-        console.log(this.PlaygroundContainer.$children)
     }
 
     // 創建旗子樣式
@@ -323,8 +317,6 @@ class Main extends eui.UILayer {
         Player2Label.x = this.stage.stageWidth - 350
         // Player2Label.textColor =Play2State.camp;
 
-        console.log(Play1State)
-       
         if(Play1State.camp == 'red'){
             Player1Label.textColor =  0xff0000
             Player2Label.textColor = 0x0000ff
@@ -337,9 +329,10 @@ class Main extends eui.UILayer {
             Player2Label.textColor = egret.TextField.default_textColor
         }else{
             Player1Label.textColor =  0x0000ff
+            Player2Label.textColor = 0xff0000
             Player1Label.strokeColor = egret.TextField.default_textColor
             Player2Label.strokeColor = egret.TextField.default_textColor
-            Player2Label.textColor = 0xff0000
+         
             Player1Label.stroke = 2;
             Player2Label.stroke = 2;
         }
@@ -367,7 +360,7 @@ class Main extends eui.UILayer {
 
     // concrete 遊戲中的職責鏈
     let GetRequest = new Request(currPlayer(),chess,concreteGameStore,this.allChess,switchPlayer)
-    console.log(GetRequest)
+
     this.resetAllChessState()
 
     if(chess.state == 'close'){

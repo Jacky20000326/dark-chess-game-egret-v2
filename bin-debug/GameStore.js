@@ -29,7 +29,7 @@ var GameStore = (function () {
         this.preChooseChess = null;
     };
     GameStore.prototype.MoveCount = function (state) {
-        var DrawChess = 2;
+        var DrawChess = 40;
         if (state == "ReSetCount") {
             this.count = 0;
             return;

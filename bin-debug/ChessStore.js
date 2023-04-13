@@ -259,14 +259,19 @@ var ChessOpenStage = (function (_super) {
     };
     ChessOpenStage.prototype.Aggressive = function (currChess, getAllChess, switchPlayer, currPlayer, gameState) {
         // 將(帥)兵(卒)規則 // 若為六可以吃
-        var result;
-        result = currChess.rank - this.chess.rank == 6 ? "kingCannotAggressive" : "kingAggressive";
-        result = currChess.rank - this.chess.rank == -6 ? "PawnAggressive" : "PawncannotAggressive";
-        if (result == "kingCannotAggressive") {
+        var KingRull;
+        var PawnRull;
+        KingRull = currChess.rank - this.chess.rank == 6 ? "kingCannotAggressive" : "kingAggressive";
+        var PawnRull = currChess.rank - this.chess.rank == -6 ? "PawnCanAggressive" : "PawnCannotAggressive";
+        if (currChess.belong == this.chess.belong) {
+            alert("It's my chess");
+            return;
+        }
+        if (KingRull == "kingCannotAggressive") {
             alert("Cannot eat a chess piece bigger than oneself");
             return;
         }
-        if (currChess.rank >= this.chess.rank || result == "PawnAggressive") {
+        if (currChess.rank >= this.chess.rank || PawnRull == "PawnCanAggressive") {
             this.Move(currChess, getAllChess, switchPlayer);
             currChess.state = "none";
             currChess.ConcreteSetStage(new ChessNoneStage(this.chess));
