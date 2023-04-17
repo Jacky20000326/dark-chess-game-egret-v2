@@ -1,8 +1,8 @@
 class GameStore {
     winner: string
     count: number
-    preChooseChess: any
-    occupiedState: any
+    preChooseChess: ChessInfo
+    occupiedState: ChessInfo
     constructor() {
         this.preChooseChess = null;
         this.occupiedState = null;
@@ -63,6 +63,7 @@ class HeadHandler extends Handler {
 
 class ChoseSameCampChess extends Handler {
     HandleRequest(request) {
+        console.log(request.currPlayer.camp)
         if (request.gameState.preChooseChess !== null) {
             this.condition.HandleRequest(request);
             return;
@@ -83,6 +84,7 @@ class ChoseSameCampChess extends Handler {
 
 class EatChess extends Handler {
     HandleRequest(request) {
+        console.log(request.currChess.state)
         if (request.currChess.state == "open") {
             request.gameState.preChooseChess.ConcreteAggressive(
                 request.currChess,
@@ -94,7 +96,15 @@ class EatChess extends Handler {
             request.gameState.ResetpreChooseChess();
             request.gameState.MoveCount("ReSetCount");
         } else {
-            console.log('error')
+            this.condition.HandleRequest(request);
         }
+    }
+}
+
+ class MoveChess extends Handler {
+    HandleRequest(request) {
+        request.gameState.preChooseChess.ConcreteMove(request.currChess, request.AllChessArr, request.switchPlayer);
+        request.gameState.ResetpreChooseChess();
+        request.gameState.MoveCount("AddCount");
     }
 }

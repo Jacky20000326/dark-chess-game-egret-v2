@@ -84,6 +84,7 @@ var ChoseSameCampChess = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ChoseSameCampChess.prototype.HandleRequest = function (request) {
+        console.log(request.currPlayer.camp);
         if (request.gameState.preChooseChess !== null) {
             this.condition.HandleRequest(request);
             return;
@@ -110,15 +111,29 @@ var EatChess = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     EatChess.prototype.HandleRequest = function (request) {
+        console.log(request.currChess.state);
         if (request.currChess.state == "open") {
             request.gameState.preChooseChess.ConcreteAggressive(request.currChess, request.AllChessArr, request.switchPlayer, request.currPlayer, request.gameState);
             request.gameState.ResetpreChooseChess();
             request.gameState.MoveCount("ReSetCount");
         }
         else {
-            console.log('error');
+            this.condition.HandleRequest(request);
         }
     };
     return EatChess;
 }(Handler));
 __reflect(EatChess.prototype, "EatChess");
+var MoveChess = (function (_super) {
+    __extends(MoveChess, _super);
+    function MoveChess() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    MoveChess.prototype.HandleRequest = function (request) {
+        request.gameState.preChooseChess.ConcreteMove(request.currChess, request.AllChessArr, request.switchPlayer);
+        request.gameState.ResetpreChooseChess();
+        request.gameState.MoveCount("AddCount");
+    };
+    return MoveChess;
+}(Handler));
+__reflect(MoveChess.prototype, "MoveChess");

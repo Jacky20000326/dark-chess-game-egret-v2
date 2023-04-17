@@ -365,7 +365,7 @@ var Main = (function (_super) {
         if (chess.state == 'close') {
             chess.ConcreteOpen();
             switchPlayer();
-            concreteGameStore.ResetpreChooseChess();
+            // concreteGameStore.ResetpreChooseChess()
             concreteGameStore.MoveCount("ReSetCount");
             return;
         }
@@ -373,7 +373,6 @@ var Main = (function (_super) {
         concreteChoseSameCampChess.SetCondition(ConcreteEatChess);
         ConcreteEatChess.SetCondition(ConcreteMoveChess);
         ConcreteHeadHandler.HandleRequest(GetRequest);
-        this.UpdateplaygroundState();
     };
     ;
     // 將所有棋子狀態改為close
@@ -394,38 +393,22 @@ var concreteGameStore = new GameStore();
 var concreteChoseSameCampChess = new ChoseSameCampChess();
 var ConcreteEatChess = new EatChess();
 var ConcreteHeadHandler = new HeadHandler();
+var ConcreteMoveChess = new MoveChess();
 // concrete 遊戲中的職責鏈
 // 玩家選陣營(camp)
 var SetCamp = function (chess) {
     if (chess.belong == "red") {
-        Play1State("red");
-        Play2State("blue");
+        Play1State.SetCamp("red");
+        Play2State.SetCamp("blue");
     }
     else {
-        Play1State("blue");
-        Play2State("red");
+        Play1State.SetCamp("blue");
+        Play2State.SetCamp("red");
     }
 };
 // 取得當前玩家
 var currPlayer = function () {
     return Play1State.state == true ? Play1State : Play2State;
-};
-// 判斷玩家的陣營與所選是否相同及判斷chess.state
-var CompareCamp = function (chess) {
-    // concrete 遊戲中的職責鏈
-    var GetRequest = new Request(currPlayer, chess, concreteGameStore, AllChess, switchPlayer);
-    resetAllChessState();
-    if (chess.state == 'close') {
-        chess.ConcreteOpen();
-        switchPlayer();
-        concreteGameStore.ResetpreChooseChess();
-        concreteGameStore.MoveCount("ReSetCount");
-        return;
-    }
-    ConcreteHeadHandler.SetCondition(concreteChoseSameCampChess);
-    concreteChoseSameCampChess.SetCondition(ConcreteEatChess);
-    ConcreteEatChess.SetCondition(ConcreteMoveChess);
-    ConcreteHeadHandler.HandleRequest(GetRequest);
 };
 // 玩家交換
 var switchPlayer = function () {

@@ -229,6 +229,7 @@ var ChessOpenStage = (function (_super) {
     };
     ChessOpenStage.prototype.Move = function (currChess, getAllChess, switchPlayer) {
         var _this = this;
+        console.log(getAllChess);
         var PreChessIndex = getAllChess.findIndex(function (item) { return item.id == _this.chess.id; });
         var CurrChessResultIndex = getAllChess.findIndex(function (item) { return item.id == currChess.id; });
         var topChessIndex = CurrChessResultIndex + 1 - 8;
@@ -252,7 +253,7 @@ var ChessOpenStage = (function (_super) {
         var KingRull;
         var PawnRull;
         KingRull = currChess.rank - this.chess.rank == 6 ? "kingCannotAggressive" : "kingAggressive";
-        var PawnRull = currChess.rank - this.chess.rank == -6 ? "PawnCanAggressive" : "PawnCannotAggressive";
+        PawnRull = currChess.rank - this.chess.rank == -6 ? "PawnCanAggressive" : "PawnCannotAggressive";
         if (currChess.belong == this.chess.belong) {
             alert("It's my chess");
             return;
@@ -337,7 +338,7 @@ var ChessCannonStage = (function (_super) {
         // 若為平行
         if (compareHorizontalIndex == targetHorizontalIndex) {
             for (var i = 1; i <= Math.abs(CurrChessResultIndex - PreChessIndex) - 1; i++) {
-                if (getAllChess[Math.min(CurrChessResultIndex, PreChessIndex) + i].state == "open") {
+                if (getAllChess[Math.min(CurrChessResultIndex, PreChessIndex) + i].state !== "none") {
                     isOneChessInBetween++;
                 }
             }
@@ -356,11 +357,11 @@ var ChessCannonStage = (function (_super) {
             if (Math.max(CurrChessResultIndex, PreChessIndex) - Math.min(CurrChessResultIndex, PreChessIndex) / 8 >=
                 2) {
                 for (var i = Math.min(CurrChessResultIndex, PreChessIndex) + 8; i < Math.max(CurrChessResultIndex, PreChessIndex); i += 8) {
-                    if (getAllChess[i].state == "open") {
+                    if (getAllChess[i].state !== "none") {
                         isOneChessInBetween++;
                     }
                 }
-                if (isOneChessInBetween == 1 && getAllChess[CurrChessResultIndex].state == "open") {
+                if (isOneChessInBetween == 1 && getAllChess[CurrChessResultIndex].state !== "none") {
                     this.chess.MoveAction(currChess, getAllChess);
                     switchPlayer();
                     currChess.state = "none";
@@ -373,8 +374,6 @@ var ChessCannonStage = (function (_super) {
             return;
         }
         alert("砲不能這樣走喔～");
-        // }
-        // console.log("cc");
     };
     ChessCannonStage.prototype.SetChoose = function () {
         this.chess.isChoose = true;

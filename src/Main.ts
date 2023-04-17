@@ -354,32 +354,27 @@ class Main extends eui.UILayer {
         return result;
     }
 
-
-
     // 判斷玩家的陣營與所選是否相同及判斷chess.state
-    CompareCamp(chess) {
-
+    protected CompareCamp(chess){
     // concrete 遊戲中的職責鏈
-    let GetRequest = new Request(currPlayer(),chess,concreteGameStore,this.allChess,switchPlayer)
+        let GetRequest = new Request(currPlayer(),chess,concreteGameStore,this.allChess,switchPlayer)
+        this.resetAllChessState()
 
-    this.resetAllChessState()
+        if(chess.state == 'close'){
+            chess.ConcreteOpen();
+            switchPlayer();
+            // concreteGameStore.ResetpreChooseChess()
+            concreteGameStore.MoveCount("ReSetCount");
+            return
+        } 
+        ConcreteHeadHandler.SetCondition(concreteChoseSameCampChess)
+        concreteChoseSameCampChess.SetCondition(ConcreteEatChess)
+        ConcreteEatChess.SetCondition(ConcreteMoveChess)
 
-    if(chess.state == 'close'){
-        chess.ConcreteOpen();
-        switchPlayer();
-        concreteGameStore.ResetpreChooseChess()
-        concreteGameStore.MoveCount("ReSetCount");
-        return
-    } 
-    
-    
-    ConcreteHeadHandler.SetCondition(concreteChoseSameCampChess)
-    concreteChoseSameCampChess.SetCondition(ConcreteEatChess)
-    ConcreteEatChess.SetCondition(ConcreteMoveChess)
-    ConcreteHeadHandler.HandleRequest(GetRequest)
-
-    this.UpdateplaygroundState()
+        ConcreteHeadHandler.HandleRequest(GetRequest)
 };
+
+
 // 將所有棋子狀態改為close
 resetAllChessState(){
     this.allChess.forEach(item => {
@@ -399,16 +394,17 @@ let concreteGameStore = new GameStore()
 let concreteChoseSameCampChess = new ChoseSameCampChess()
 let ConcreteEatChess = new EatChess()
 let ConcreteHeadHandler = new HeadHandler()
+let ConcreteMoveChess = new MoveChess()
 // concrete 遊戲中的職責鏈
 
 // 玩家選陣營(camp)
 let SetCamp = (chess) => {
     if (chess.belong == "red") {
-        Play1State("red");
-        Play2State("blue");
+        Play1State.SetCamp("red");
+        Play2State.SetCamp("blue");
     } else {
-        Play1State("blue");
-        Play2State("red");
+        Play1State.SetCamp("blue");
+        Play2State.SetCamp("red");
     }
 };
 
@@ -418,25 +414,7 @@ let currPlayer = ()=>{
 }
 
 
-// 判斷玩家的陣營與所選是否相同及判斷chess.state
-const CompareCamp = (chess) => {
-    // concrete 遊戲中的職責鏈
-    let GetRequest = new Request(currPlayer,chess,concreteGameStore,AllChess,switchPlayer)
-    resetAllChessState()
 
-    if(chess.state == 'close'){
-        chess.ConcreteOpen();
-        switchPlayer();
-        concreteGameStore.ResetpreChooseChess()
-        concreteGameStore.MoveCount("ReSetCount");
-        return
-    } 
-    ConcreteHeadHandler.SetCondition(concreteChoseSameCampChess)
-    concreteChoseSameCampChess.SetCondition(ConcreteEatChess)
-    ConcreteEatChess.SetCondition(ConcreteMoveChess)
-
-    ConcreteHeadHandler.HandleRequest(GetRequest)
-};
 
 // 玩家交換
 const switchPlayer = () => {

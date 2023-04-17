@@ -25,12 +25,13 @@ class PlayerStore {
     //     if(this.camp == chessCamp) return
     // }
 }
-
+// 透過傳值的方式較適合不用分兩個玩家
 class Player1 extends PlayerStore {
     constructor() {
         super();
         this.state = true;
     }
+    
 }
 
 class Player2 extends PlayerStore {

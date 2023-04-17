@@ -177,6 +177,7 @@ class ChessCloseStage extends Stage {
     }
 
     Move(currChess, getAllChess, switchPlayer) {
+        console.log(getAllChess)
         let PreChessIndex = getAllChess.findIndex((item) => item.id == this.chess.id);
         let CurrChessResultIndex = getAllChess.findIndex((item) => item.id == currChess.id);
 
@@ -203,7 +204,7 @@ class ChessCloseStage extends Stage {
         let KingRull;
         let PawnRull
         KingRull = currChess.rank - this.chess.rank == 6 ? "kingCannotAggressive" : "kingAggressive";
-        let PawnRull = currChess.rank - this.chess.rank == -6 ? "PawnCanAggressive" : "PawnCannotAggressive";
+         PawnRull = currChess.rank - this.chess.rank == -6 ? "PawnCanAggressive" : "PawnCannotAggressive";
         if(currChess.belong == this.chess.belong){
             alert("It's my chess")
             return
@@ -289,7 +290,7 @@ class ChessCloseStage extends Stage {
         // 若為平行
         if (compareHorizontalIndex == targetHorizontalIndex) {
             for (var i = 1; i <= Math.abs(CurrChessResultIndex - PreChessIndex) - 1; i++) {
-                if (getAllChess[Math.min(CurrChessResultIndex, PreChessIndex) + i].state == "open") {
+                if (getAllChess[Math.min(CurrChessResultIndex, PreChessIndex) + i].state !== "none") {
                     isOneChessInBetween++;
                 }
             }
@@ -299,10 +300,10 @@ class ChessCloseStage extends Stage {
                 switchPlayer();
                 currChess.state = "none";
                 currPlayer.SetScore(gameState.SetWinner);
-
+               
                 return;
             }
-
+            
             alert("砲不能這樣走喔～");
             return;
         }
@@ -317,11 +318,11 @@ class ChessCloseStage extends Stage {
                     i < Math.max(CurrChessResultIndex, PreChessIndex);
                     i += 8
                 ) {
-                    if (getAllChess[i].state == "open") {
+                    if (getAllChess[i].state !== "none") {
                         isOneChessInBetween++;
                     }
                 }
-                if (isOneChessInBetween == 1 && getAllChess[CurrChessResultIndex].state == "open") {
+                if (isOneChessInBetween == 1 && getAllChess[CurrChessResultIndex].state !== "none") {
                     this.chess.MoveAction(currChess, getAllChess);
                     switchPlayer();
                     currChess.state = "none";
@@ -332,10 +333,9 @@ class ChessCloseStage extends Stage {
             }
             return;
         }
-
+       
         alert("砲不能這樣走喔～");
-        // }
-        // console.log("cc");
+        
     }
     SetChoose() {
         this.chess.isChoose = true;
